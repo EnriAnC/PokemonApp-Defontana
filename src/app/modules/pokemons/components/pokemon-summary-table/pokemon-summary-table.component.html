@@ -1,0 +1,17 @@
+<h2>Cantidad de Pokémons por letra inicial</h2>
+<div *ngFor="let chunk of summary | keyvalue | chunk : 8; let i = index">
+  <table>
+    <thead>
+      <tr>
+        <th *ngFor="let item of chunk">{{ item.key }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let item of chunk">
+          <span>{{ item.value }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

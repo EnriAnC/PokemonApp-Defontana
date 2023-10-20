@@ -1,0 +1,44 @@
+<div class="favorites_pokemons_section">
+  <h2>Mis Pokémon Favoritos</h2>
+  <ul
+    *ngIf="(favoritePokemons$ | async)?.length; else noPokemon"
+    class="favorite_pokemons_list"
+  >
+    <li *ngFor="let pokemon of favoritePokemons$ | async">
+      <article class="card-favorite-pokemon">
+        <span>
+          <img
+            src="{{ pokemon.sprites.front_default }}"
+            alt=""
+            style="align-self: center"
+          />
+          {{ pokemon.name }}
+        </span>
+        <span>
+          <button (click)="onPokemonClicked(pokemon)">Ver detalles</button>
+          <button (click)="onRemoveFavorite(pokemon)">
+            Quitar de favoritos
+          </button>
+        </span>
+      </article>
+    </li>
+  </ul>
+
+  <ng-template #noPokemon>
+    <ul class="favorite_pokemons_list" style="align-items: center">
+      <li style="display: flex; align-items: center">
+        ¡Agrega a tus pokemones favoritos!
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="yellow"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-label="Agregar a favoritos"
+        >
+          <use href="#start-light-svg"></use>
+        </svg>
+      </li>
+    </ul>
+  </ng-template>
+</div>

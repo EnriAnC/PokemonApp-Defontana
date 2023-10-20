@@ -1,0 +1,56 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.details_container {
+  padding: 0.5rem 0;
+}
+.details_body_section {
+  display: flex;
+  padding: 1rem 0;
+  justify-content: space-around;
+
+  .image-gallery {
+    align-self: center;
+  }
+}
+.image-gallery {
+  display: flex;
+  width: auto; /* Ancho fijo del section */
+  height: 100%;
+}
+
+.image-main {
+  padding: 0 20px; /* Espacio entre la imagen principal y las miniaturas */
+  height: 100%;
+}
+
+.image-main img {
+  /* Asegura que la imagen principal no se desborde */
+  height: auto; /* Mantiene la proporción original de la imagen */
+  display: block; /* Elimina el espacio adicional debajo de la imagen */
+  border: 1px solid #ddd; /* Agrega un borde alrededor de la imagen */
+  height: 100%;
+  width: 200px;
+}
+
+.thumbnails {
+  height: 202px;
+  width: 70px; /* Ancho fijo de la sección de miniaturas */
+  overflow-x: hidden;
+  overflow-y: scroll; /* Agrega una barra de desplazamiento vertical si es necesario */
+  padding: 5px;
+}
+
+.thumbnails img {
+  display: block;
+  width: 100%; /* Las miniaturas ocupan todo el ancho del contenedor */
+  margin-bottom: 10px; /* Espacio entre miniaturas */
+  transform: box-shadow 0.5s;
+}
+.thumbnails img:hover {
+  box-shadow: 0 0 1px #000; /* Agrega un borde alrededor de la imagen */
+}
+
+/* Personaliza el estilo de las miniaturas según tus preferencias */

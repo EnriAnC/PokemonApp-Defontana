@@ -1,0 +1,36 @@
+$p-x-header: 1rem;
+$p-y-header: 0.5rem;
+$m-x-header: 0rem;
+$m-y-header: 0.5rem;
+
+.container {
+  min-height: 100vh;
+  header {
+    height: 20vh;
+    width: 100%;
+    margin: $m-y-header $m-x-header;
+    padding: $p-x-header 0;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  }
+  main {
+    display: flex;
+    column-gap: 1rem;
+    min-height: 80%;
+    width: 100%;
+    min-height: calc(100vh - 100px - $m-y-header * 2 - $p-y-header * 2);
+    section {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    }
+    :nth-child(1) {
+      width: 100%;
+    }
+    :nth-child(2) {
+      display: grid;
+      width: 100%;
+      grid-template-rows: 50% 50%;
+    }
+  }
+  padding: 0rem 3vh;
+}

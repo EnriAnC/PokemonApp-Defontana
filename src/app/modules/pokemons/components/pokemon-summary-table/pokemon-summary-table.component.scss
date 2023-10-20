@@ -1,0 +1,39 @@
+div {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Courier New", monospace;
+}
+
+th,
+td {
+  text-align: center;
+  padding: 10px;
+  flex: 1;
+}
+
+th {
+  padding-bottom: 0;
+  font-size: 24px;
+}
+
+td {
+  padding: 0.2rem 0 10px 0;
+  font-size: 18px;
+}
+
+/* Opcional: Estilos para las filas impares */
+tr:nth-child(odd) {
+  background-color: #f9f9f9; /* Color de fondo para las filas impares */
+}
+
+td:hover,
+th:hover {
+  background-color: #e0e0e0;
+}

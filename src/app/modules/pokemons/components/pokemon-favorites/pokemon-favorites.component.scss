@@ -1,0 +1,70 @@
+$p-x-header: 1rem;
+$p-y-header: 0.5rem;
+$m-x-header: 0rem;
+$m-y-header: 0.5rem;
+
+.favorites_pokemons_section {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0 $p-x-header;
+}
+
+.favorite_pokemons_list {
+  height: 100%;
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  width: 100%;
+  padding: 0;
+  scrollbar-width: thin;
+  li {
+    display: flex;
+    padding: 0.5rem 0.25rem;
+
+    article {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 200px;
+      width: 100%;
+      height: 100%;
+      // border: 1px solid rgb(230, 230, 230);
+      padding: 0 0.5rem;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+      img {
+        width: 50px;
+        height: 50px;
+        margin: -10px;
+      }
+      span {
+        display: flex;
+        flex-direction: column;
+        button {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Establece el estilo para la barra de desplazamiento */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Establece el estilo para la manija del scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Establece el estilo para la manija del scrollbar al pasar el mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

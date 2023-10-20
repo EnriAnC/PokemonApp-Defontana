@@ -1,0 +1,71 @@
+form {
+  position: relative;
+}
+
+.autocomplete {
+  width: auto;
+  max-height: 10rem;
+  overflow-y: auto;
+  position: absolute;
+  background-color: white;
+  p {
+    padding: 0.35rem 0.5rem;
+    margin: 0;
+  }
+  p:hover {
+    background-color: aquamarine;
+  }
+}
+
+/* Estilo para la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+}
+
+tr,
+th {
+  white-space: nowrap; /* Evitar saltos de línea */
+  overflow: hidden; /* Ocultar contenido que se desborda */
+  text-overflow: ellipsis; /* Mostrar puntos (...) si se desborda */
+}
+
+tr {
+  :nth-child(1) {
+    width: 50%;
+  }
+  :nth-child(2) {
+    text-align: center;
+  }
+  :nth-child(3) {
+    text-align: center;
+  }
+}
+/* Estilo para las celdas del encabezado */
+th {
+  border: 1px solid #ccc;
+  padding: 0.25rem 10px;
+  text-align: left;
+}
+
+/* Estilo para las celdas de datos */
+td {
+  border: 1px solid #ccc;
+  padding: 0.25rem 10px;
+  text-align: left;
+}
+
+.pagination_buttons {
+  align-self: center;
+}
+
+content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.activar-favorite-button ~ svg {
+  fill: yellow;
+}
