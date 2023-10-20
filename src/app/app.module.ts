@@ -10,11 +10,13 @@ import { StoreModule } from '@ngrx/store';
 import { favoritePokemonReducer } from './shared/store/favorite-pokemon.reducer';
 import { SharedModule } from './shared/shared.module';
 import { PokemonsModule } from './modules/pokemons/pokemons.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    RouterModule,
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot({ favorites: favoritePokemonReducer }, {}),
