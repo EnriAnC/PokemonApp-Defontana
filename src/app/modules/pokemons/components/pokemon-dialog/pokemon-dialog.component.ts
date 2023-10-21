@@ -21,6 +21,7 @@ export class PokemonDialogComponent {
 
   closeModal(event: Event) {
     this.close.emit();
+    document.body.parentElement!.classList.remove('no-scroll');
   }
 
   preventDefault(event: Event) {

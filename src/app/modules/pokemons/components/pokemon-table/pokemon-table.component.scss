@@ -18,6 +18,7 @@ form {
   p:hover {
     background-color: aquamarine;
   }
+  z-index: 5;
 }
 
 /* Estilo para la tabla */
@@ -78,4 +79,18 @@ content {
 
 .activar-favorite-button ~ svg {
   fill: yellow;
+}
+
+@media (max-width: 450px) {
+  tr {
+    :nth-child(1) {
+      width: auto;
+    }
+    :nth-child(2) {
+      text-align: center;
+    }
+    :nth-child(3) {
+      text-align: center;
+    }
+  }
 }

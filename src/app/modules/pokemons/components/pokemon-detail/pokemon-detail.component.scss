@@ -12,7 +12,7 @@ header {
 }
 .details_body_section {
   display: flex;
-  padding: 1rem 0;
+  padding: 1rem 0 0 0;
   justify-content: space-around;
 
   .image-gallery {
@@ -22,9 +22,9 @@ header {
   article {
     display: flex;
     flex-direction: column;
-    margin: 0.75rem 0;
+    // margin: 0.75rem 0;
     strong {
-      margin-bottom: 0.35rem;
+      margin: 0.75rem 0 0.35rem 0;
     }
     ul {
       display: flex;
@@ -47,43 +47,62 @@ header {
 
 .image-gallery {
   display: flex;
-  width: auto; /* Ancho fijo del section */
+  width: auto;
   height: 100%;
 }
 
 .image-main {
-  padding: 0 20px; /* Espacio entre la imagen principal y las miniaturas */
+  padding: 0 20px;
   height: 100%;
 }
 
 .image-main img {
   /* Asegura que la imagen principal no se desborde */
-  height: auto; /* Mantiene la proporción original de la imagen */
-  display: block; /* Elimina el espacio adicional debajo de la imagen */
-  border: 1px solid #ddd; /* Agrega un borde alrededor de la imagen */
-  height: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #ddd;
   width: 200px;
 }
 
 .thumbnails {
   height: 202px;
-  width: 70px; /* Ancho fijo de la sección de miniaturas */
+  width: 70px;
   overflow-x: hidden;
-  overflow-y: scroll; /* Agrega una barra de desplazamiento vertical si es necesario */
+  overflow-y: scroll;
   padding: 5px;
 }
 
 .thumbnails img {
   display: block;
-  width: 100%; /* Las miniaturas ocupan todo el ancho del contenedor */
-  margin-bottom: 10px; /* Espacio entre miniaturas */
+  width: 100%;
+  margin-bottom: 10px;
   transform: box-shadow 0.5s;
 }
 .thumbnails img:hover {
-  box-shadow: 0 0 1px #000; /* Agrega un borde alrededor de la imagen */
+  box-shadow: 0 0 1px #000;
 }
 
 /* Personaliza el estilo de las miniaturas según tus preferencias */
+
+@media (min-width: 990px) and (max-width: 1200px) {
+  .image-gallery {
+    flex-direction: column;
+    align-items: center;
+    .thumbnails {
+      display: flex;
+      flex: 1;
+      width: 200px;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      contain: content;
+      img {
+        width: 50px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
 @media (max-width: 630px) {
   .details_body_section {
     flex-direction: column-reverse;
@@ -113,7 +132,24 @@ header {
       contain: content;
       img {
         margin-bottom: 0;
+        width: 50px;
       }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .image-main img {
+    width: 128px;
+  }
+  .thumbnails {
+    height: 202px;
+    width: 36px; /* Ancho fijo de la sección de miniaturas */
+    overflow-x: hidden;
+    overflow-y: scroll; /* Agrega una barra de desplazamiento vertical si es necesario */
+    padding: 5px;
+    img {
+      width: 50px;
     }
   }
 }

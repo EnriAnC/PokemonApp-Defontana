@@ -36,6 +36,7 @@ $m-y-header: 0.5rem;
     }
     :nth-child(1) {
       width: 100%;
+      padding: 0.5rem;
     }
     :nth-child(2) {
       display: grid;
@@ -43,7 +44,7 @@ $m-y-header: 0.5rem;
       grid-template-rows: repeat(auto-fit, minmax(310px, 1fr));
     }
   }
-  padding: 0rem 3vh;
+  padding: 0rem 3vw;
 }
 
 @media (max-width: 990px) {
@@ -52,4 +53,10 @@ $m-y-header: 0.5rem;
       flex-direction: column;
     }
   }
+}
+
+@media (max-width: 560px) {
+  // .container {
+  //   padding: 0;
+  // }
 }

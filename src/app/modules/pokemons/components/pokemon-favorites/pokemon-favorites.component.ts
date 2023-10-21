@@ -34,6 +34,7 @@ export class PokemonFavoritesComponent {
   onPokemonClicked(pokemon: Pokemon): void {
     console.log('Pokemon clicked: ', { pokemon });
     this.modalPokemonService.setSelectedPokemon(pokemon);
+    document.body.parentElement!.classList.add('no-scroll');
   }
 
   closeDialog(): void {

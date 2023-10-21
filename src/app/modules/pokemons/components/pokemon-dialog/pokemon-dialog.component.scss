@@ -43,3 +43,10 @@ dialog::backdrop {
   //   bottom: 0;
   background-color: #000000;
 }
+
+@media (max-width: 600px) {
+  dialog {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
