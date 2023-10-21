@@ -1,5 +1,5 @@
 <!-- pokemon-detail.component.html -->
-<div *ngIf="selectedPokemon" class="details_container">
+<div *ngIf="selectedPokemon" class="details_container" id="details_container">
   <header>
     <h2>
       Detalles de
@@ -10,24 +10,25 @@
     <p>ID: {{ selectedPokemon.id }}</p>
   </header>
   <section class="details_body_section">
-    <article>
-      <strong>Habilidades</strong>
-      <ul>
-        <li *ngFor="let ability of selectedPokemon.abilities">
-          {{ ability.ability.name }}
-        </li>
-      </ul>
-    </article>
+    <div>
+      <article>
+        <strong>Habilidades</strong>
+        <ul>
+          <li *ngFor="let ability of selectedPokemon.abilities">
+            {{ ability.ability.name }}
+          </li>
+        </ul>
+      </article>
 
-    <article>
-      <strong>Estadísticas</strong>
-      <ul>
-        <li *ngFor="let stat of selectedPokemon.stats">
-          {{ stat.stat.name }}
-          {{ stat.base_stat }}
-        </li>
-      </ul>
-    </article>
+      <article>
+        <strong>Estadísticas</strong>
+        <ul>
+          <li *ngFor="let stat of selectedPokemon.stats" class="pokemon-stat">
+            {{ stat.base_stat }} {{ stat.stat.name }}
+          </li>
+        </ul>
+      </article>
+    </div>
 
     <section class="image-gallery">
       <div class="image-main">
@@ -56,4 +57,9 @@
   </section>
 
   <!-- Agrega más detalles según lo que necesites -->
+</div>
+<div *ngIf="!selectedPokemon" id="details_container">
+  <h2 style="padding: 0 1rem; color: #757575">
+    Selecciona un Pokémon para ver sus detalles
+  </h2>
 </div>

@@ -14,8 +14,11 @@ export class PokemonDetailComponent {
   constructor(private pokemonSelectedService: PokemonSelectedService) {}
 
   ngOnInit(): void {
+    if (this.selectedPokemon) return;
+
     this.pokemonSelectedService.selectedPokemon$.subscribe(
       (pokemon: Pokemon) => {
+        if (!pokemon) return;
         console.log('Pokemon detail: ', pokemon);
         this.selectedPokemon = pokemon;
         this.selectedThumbnail = pokemon.sprites.front_default;

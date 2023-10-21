@@ -12,13 +12,26 @@
             alt=""
             style="align-self: center"
           />
-          {{ pokemon.name }}
+          <p>{{ pokemon.name }}</p>
         </span>
-        <span>
-          <button (click)="onPokemonClicked(pokemon)">Ver detalles</button>
-          <button (click)="onRemoveFavorite(pokemon)">
-            Quitar de favoritos
-          </button>
+        <span class="action_buttons">
+          <i (click)="onPokemonClicked(pokemon)" role="open-dialog-details">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              role="details-button"
+            >
+              <use href="#info-light-svg"></use>
+            </svg>
+          </i>
+          <i (click)="onRemoveFavorite(pokemon)" role="remmove-favorite">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#red">
+              <use href="#remove-fill-svg"></use>
+            </svg>
+          </i>
         </span>
       </article>
     </li>
@@ -41,4 +54,6 @@
       </li>
     </ul>
   </ng-template>
+
+  <app-dialog (close)="closeDialog()"></app-dialog>
 </div>

@@ -1,12 +1,11 @@
-<content>
+<content style="padding: 0.5rem 1rem">
   <form [formGroup]="formGroup" (ngSubmit)="onSearch()">
     <fieldset>
       <legend>Buscar pokemon</legend>
-      <label
-        >Nombre: <br />
+      <label>
         <input
           formControlName="searchTerm"
-          placeholder="Buscar por nombre"
+          placeholder="Nombre del pokemón"
           (input)="onSearchTermChanged($event)"
         />
         <div *ngIf="showRecommendations" class="autocomplete">
@@ -19,6 +18,7 @@
         </div>
       </label>
       <button type="submit">Buscar</button>
+      <button (click)="cleanForm()">Limpiar</button>
     </fieldset>
   </form>
 
@@ -33,20 +33,24 @@
       <tr *ngFor="let pokemon of pokemons">
         <td>{{ pokemon.name }}</td>
         <!-- <td>{{ pokemon.url }}</td> -->
-        <td (click)="onSelectPokemon(pokemon)" class="tooltip">
-          <svg
-            width="30"
-            height="30"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            role="details-button"
-          >
-            <use href="#info-light-svg"></use>
-          </svg>
+        <td class="tooltip">
+          <a href="#details_container" (click)="onSelectPokemon(pokemon)">
+            <svg
+              #detailsButton
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              role="details-button"
+            >
+              <use href="#info-light-svg"></use>
+            </svg>
 
-          <p class="tooltiptext">VER DETALLES</p>
+            <p class="tooltiptext">VER DETALLES</p>
+          </a>
         </td>
+
         <td class="tooltip">
           <svg
             #favoriteStar

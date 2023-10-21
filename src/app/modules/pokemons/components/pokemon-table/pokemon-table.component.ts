@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Pokemon as IPokemon } from '../../models/pokemon';
 import { PokemonSelectedService } from '../../services/pokemon-selected.service';
 import { PokemonSummaryService } from '../../services/pokemon-summary.service';
+
 import { map } from 'rxjs';
 
 @Component({
@@ -44,7 +45,9 @@ export class PokemonTableComponent implements OnInit {
   }
   ngOnInit(): void {
     this.store.select('favorites').subscribe((favorites) => {
+      console.log('Favorites: ', { favorites });
       this.favoritePokemons = Object.values(favorites.favorites);
+      this.loadPokemons();
     });
     this.pokemonSummaryService.getPokemonNames().subscribe((names) => {
       this.allPokemonNames = names;
@@ -107,6 +110,26 @@ export class PokemonTableComponent implements OnInit {
     }
   }
 
+  onSearchTermChanged(event: Event): void {
+    const value = (event.target as HTMLInputElement)?.value;
+    // console.log('onSearchTermChanged: ', value);
+    if (value) {
+      this.matchingPokemonNames = this.allPokemonNames.filter((name) =>
+        name.toLowerCase().includes(value.toLowerCase())
+      );
+      // Aquí puedes mostrar las recomendaciones basadas en matchingPokemonNames
+      this.showRecommendations = this.matchingPokemonNames.length > 0;
+    } else {
+      this.showRecommendations = false;
+    }
+  }
+
+  cleanForm(): void {
+    this.formGroup.get('searchTerm')!.setValue('');
+    this.showRecommendations = false;
+    this.loadPokemons();
+  }
+
   calculateTotalPages(): number {
     return this.totalPokemons
       ? Math.ceil(this.totalPokemons / this.pageSize)
@@ -116,7 +139,7 @@ export class PokemonTableComponent implements OnInit {
   onSelectPokemon(pokemon: any): void {
     this.pokemonService.getPokemonByName(pokemon.name).subscribe({
       next: (data: IPokemon) => {
-        console.log('OnSelectPokemon: ', data);
+        // console.log('OnSelectPokemon: ', data);
         this.pokemonSelectedService.setSelectedPokemon(data);
       },
       error: (error) => {
@@ -152,27 +175,13 @@ export class PokemonTableComponent implements OnInit {
     }
   }
 
-  onSearchTermChanged(event: Event): void {
-    const value = (event.target as HTMLInputElement)?.value;
-    console.log('onSearchTermChanged: ', value);
-    if (value) {
-      this.matchingPokemonNames = this.allPokemonNames.filter((name) =>
-        name.toLowerCase().includes(value.toLowerCase())
-      );
-      // Aquí puedes mostrar las recomendaciones basadas en matchingPokemonNames
-      this.showRecommendations = this.matchingPokemonNames.length > 0;
-    } else {
-      this.showRecommendations = false;
-    }
-  }
-
   onRecommendationClick(name: string): void {
     this.formGroup.get('searchTerm')!.setValue(name);
     this.showRecommendations = false; // Oculta las recomendaciones cuando se hace clic
   }
 
   isPokemonInFavorites(pokemon: any): boolean {
-    console.log('isPokemonInFavorites: ', pokemon);
+    // console.log('isPokemonInFavorites: ', pokemon);
     return this.favoritePokemons.some(
       (favPokemon) => favPokemon.name === pokemon.name
     );
