@@ -6,6 +6,7 @@ $m-y-header: 0.5rem;
 .container {
   min-height: 100vh;
   header {
+    min-height: 150px;
     height: 20vh;
     width: 100%;
     margin: $m-y-header $m-x-header;
