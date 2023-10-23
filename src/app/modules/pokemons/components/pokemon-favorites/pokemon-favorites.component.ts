@@ -1,29 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
-import { removeFavoritePokemon } from '../../../../shared/store/favorite-pokemon.actions';
-import { Pokemon } from '../../models/pokemon';
+import {
+  removeFavoritePokemon,
+  setFavoritePokemons,
+} from '../../../../shared/store/favorite-pokemon.actions';
+import {
+  Ability,
+  Pokemon,
+  PokemonCoreInfo,
+  Sprites,
+  Stat,
+} from '../../models/pokemon';
 import { DialogPokemonService } from '../../services/pokemon-dialog.service';
+import { LocalStorageService } from '../../services/local-storage-service';
 
 @Component({
   selector: 'app-pokemon-favorites',
   templateUrl: './pokemon-favorites.component.html',
   styleUrls: ['./pokemon-favorites.component.scss'],
 })
-export class PokemonFavoritesComponent {
+export class PokemonFavoritesComponent implements OnInit {
   favoritePokemons$!: Observable<Pokemon[]>;
 
   constructor(
     private store: Store<{ favorites: any }>,
-    private modalPokemonService: DialogPokemonService
+    private dialogPokemonService: DialogPokemonService,
+    private localStorageService: LocalStorageService
   ) {
     this.favoritePokemons$ = store.pipe(
       select('favorites'),
       map((favorites) => {
-        // console.log('Favorites: ', { favorites });
+        this.setFavoritePokemonOnLocalStorage(
+          this.mapPokemons(favorites.favorites)
+        );
+
         return Object.values(favorites.favorites);
       })
     );
+  }
+
+  ngOnInit(): void {
+    // Cargar datos desde el localStorage al iniciar el componente
+    const favoritePokemonsFromLocalStorage =
+      this.localStorageService.getItem('favoritePokemons');
+    if (favoritePokemonsFromLocalStorage) {
+      this.store.dispatch(
+        setFavoritePokemons({ pokemons: favoritePokemonsFromLocalStorage })
+      );
+    }
   }
 
   onRemoveFavorite(pokemon: Pokemon): void {
@@ -31,13 +56,25 @@ export class PokemonFavoritesComponent {
   }
 
   onPokemonClicked(pokemon: Pokemon): void {
-    // console.log('Pokemon clicked: ', { pokemon });
-    this.modalPokemonService.setSelectedPokemon(pokemon);
+    this.dialogPokemonService.setSelectedPokemon(pokemon);
     document.body.parentElement!.classList.add('no-scroll');
   }
 
   closeDialog(): void {
-    // this.selectedPokemon = null;
-    this.modalPokemonService.setSelectedPokemon(null);
+    this.dialogPokemonService.setSelectedPokemon(null);
+  }
+
+  setFavoritePokemonOnLocalStorage(favorites: PokemonCoreInfo[]): void {
+    this.localStorageService.setItem('favoritePokemons', favorites);
+  }
+
+  mapPokemons(pokemons: Pokemon[]): PokemonCoreInfo[] {
+    return pokemons.map(({ id, name, abilities, stats, sprites }) => ({
+      id,
+      name,
+      abilities,
+      stats,
+      sprites: { ...sprites, other: {}, versions: {} },
+    }));
   }
 }

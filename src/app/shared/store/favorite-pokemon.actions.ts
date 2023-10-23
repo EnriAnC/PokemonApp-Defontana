@@ -10,3 +10,8 @@ export const removeFavoritePokemon = createAction(
   '[Favorites] Remove Favorite Pokemon',
   props<{ pokemon: any }>()
 );
+
+export const setFavoritePokemons = createAction(
+  '[Favorites] Set Favorite Pokemons',
+  props<{ pokemons: any }>()
+);

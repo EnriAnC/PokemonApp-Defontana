@@ -10,6 +10,14 @@ export interface Result {
   url: string;
 }
 
+export interface PokemonCoreInfo {
+  id: number;
+  name: string;
+  abilities: Ability[];
+  stats: Stat[];
+  sprites: Object;
+}
+
 export interface Pokemon {
   abilities: Ability[];
   base_experience: number;

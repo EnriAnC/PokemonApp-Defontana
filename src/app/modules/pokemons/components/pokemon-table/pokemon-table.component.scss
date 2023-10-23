@@ -73,6 +73,9 @@ td {
   border: 1px solid #ccc;
   padding: 0.25rem 10px;
   text-align: left;
+  &:nth-child(1) {
+    white-space: break-spaces;
+  }
 }
 .details-button-scroll {
   display: none;

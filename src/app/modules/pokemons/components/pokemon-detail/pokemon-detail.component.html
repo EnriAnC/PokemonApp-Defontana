@@ -63,18 +63,22 @@
     </section>
   </div>
 </ng-container>
-<div *ngIf="!selectedPokemon" id="details_container">
+<div
+  *ngIf="!selectedPokemon"
+  id="details_container"
+  class="initial_statte_details"
+>
   <h2 style="padding: 0 1rem; color: #757575">
     Selecciona un Pokémon para ver sus detalles
-    <svg
-      width="30"
-      height="30"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      role="details-button"
-    >
-      <use href="#info-light-svg"></use>
-    </svg>
   </h2>
+  <svg
+    width="30"
+    height="30"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    role="details-button"
+  >
+    <use href="#info-light-svg"></use>
+  </svg>
 </div>

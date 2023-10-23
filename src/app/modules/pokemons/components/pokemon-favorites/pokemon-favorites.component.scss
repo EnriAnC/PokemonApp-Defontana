@@ -98,3 +98,12 @@ $m-y-header: 0.5rem;
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+@media (max-width: 500px) {
+  .favorites_pokemons_section {
+    flex-direction: column;
+    > h2 {
+      font-size: 1.25rem;
+    }
+  }
+}
