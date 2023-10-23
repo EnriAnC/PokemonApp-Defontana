@@ -1,3 +1,15 @@
+export interface PokemonPaginated {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Result[];
+}
+
+export interface Result {
+  name: string;
+  url: string;
+}
+
 export interface Pokemon {
   abilities: Ability[];
   base_experience: number;

@@ -8,6 +8,7 @@ import { PokemonTableComponent } from './components/pokemon-table/pokemon-table.
 import { LayoutPrincipalComponent } from './pages/layout-principal/layout-principal.component';
 import { ChunkPipe } from './pipes/chunk-pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { PokemonSearchComponent } from './components/pokemon-search/pokemon-search.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     PokemonSummaryTableComponent,
     LayoutPrincipalComponent,
     ChunkPipe,
+    PokemonSearchComponent,
   ],
   imports: [CommonModule, SharedModule],
   exports: [LayoutPrincipalComponent],

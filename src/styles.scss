@@ -5,6 +5,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 body {
   overflow: hidden;
@@ -66,7 +67,7 @@ svg[role="favorite-button"]:hover {
 }
 
 svg[role="details-button"]:hover {
-  fill: rgb(105, 145, 245);
+  fill: rgb(105, 224, 245);
   cursor: pointer;
 }
 

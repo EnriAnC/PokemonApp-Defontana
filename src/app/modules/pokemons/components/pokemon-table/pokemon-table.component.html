@@ -1,91 +1,117 @@
 <content style="padding: 0.5rem 1rem">
-  <form [formGroup]="formGroup" (ngSubmit)="onSearch()">
-    <fieldset>
-      <legend>Buscar pokemon</legend>
-      <label>
-        <input
-          formControlName="searchTerm"
-          placeholder="Nombre del pokemón"
-          (input)="onSearchTermChanged($event)"
-        />
-        <div *ngIf="showRecommendations" class="autocomplete">
-          <p
-            *ngFor="let name of matchingPokemonNames"
-            (click)="onRecommendationClick(name)"
-          >
-            {{ name }}
-          </p>
-        </div>
-      </label>
-      <button type="submit">Buscar</button>
-      <button (click)="cleanForm()">Limpiar</button>
-    </fieldset>
-  </form>
+  <h2>¡Busca a tu Pokemón!</h2>
+  <app-pokemon-search
+    [allPokemonNames]="allPokemonNames"
+    (searchResult)="onSearchResults($event)"
+  ></app-pokemon-search>
 
+  <p class="label-select-pages">
+    <label id="itemsFromPage">
+      Página actual:
+      <select
+        id="currentPage"
+        [(ngModel)]="currentPage"
+        (change)="onSelectPage()"
+      >
+        <option *ngFor="let page of pagesArray()" [value]="page">
+          {{ page }}
+        </option>
+      </select>
+    </label>
+    <label>
+      Pokemóns por página:
+      <select id="itemsPerPage" [(ngModel)]="pageSize" (change)="setPageSize()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select>
+    </label>
+  </p>
   <table>
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Nombre</th>
         <!-- <th>URL</th> -->
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let pokemon of pokemons">
-        <td>{{ pokemon.name }}</td>
-        <!-- <td>{{ pokemon.url }}</td> -->
-        <td class="tooltip">
-          <a href="#details_container" (click)="onSelectPokemon(pokemon)">
+      <ng-container *ngIf="pokemonsInTable as pokemons">
+        <!-- Aquí puedes iterar sobre pokemons como un arreglo -->
+        <tr *ngFor="let pokemon of pokemons">
+          <td>{{ pokemon.name }}</td>
+          <!-- <td>{{ pokemon.url }}</td> -->
+          <td class="tooltip">
+            <a
+              href="#details_container"
+              class="details-button-scroll"
+              (click)="onSelectPokemon(pokemon)"
+            >
+              <svg
+                #detailsButton
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                role="details-button"
+              >
+                <use href="#info-light-svg"></use>
+              </svg>
+
+              <p class="tooltiptext">VER DETALLES</p>
+            </a>
+
+            <a
+              class="details-button-no-scroll"
+              (click)="onSelectPokemon(pokemon)"
+            >
+              <svg
+                #detailsButton
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                role="details-button"
+              >
+                <use href="#info-light-svg"></use>
+              </svg>
+
+              <p class="tooltiptext">VER DETALLES</p>
+            </a>
+          </td>
+
+          <td class="tooltip">
             <svg
-              #detailsButton
+              #favoriteStar
               width="30"
               height="30"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              role="details-button"
+              aria-label="Agregar a favoritos"
+              role="favorite-button"
+              (click)="onFavoriteClick(pokemon)"
+              [ngClass]="{ 'favorite-star': pokemon.isFavorite }"
             >
-              <use href="#info-light-svg"></use>
+              <use href="#start-light-svg"></use>
             </svg>
 
-            <p class="tooltiptext">VER DETALLES</p>
-          </a>
-        </td>
-
-        <td class="tooltip">
-          <svg
-            #favoriteStar
-            width="30"
-            height="30"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-label="Agregar a favoritos"
-            role="favorite-button"
-            (click)="onFavoriteClick(pokemon, favoriteStar)"
-            [ngClass]="{ 'favorite-star': pokemon.isFavorite }"
-          >
-            <use href="#start-light-svg"></use>
-          </svg>
-
-          <p class="tooltiptext">AGREGAR FAVORITOS</p>
-        </td>
-      </tr>
+            <p class="tooltiptext">AGREGAR FAVORITOS</p>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 
   <div class="pagination_buttons">
-    <button
-      (click)="onPageChange(currentPage - 1)"
-      [disabled]="currentPage === 1"
-    >
-      Anterior
+    <button (click)="onPageChange(-1)" [disabled]="currentPage === 1">
+      <p style="transform: rotateY(180deg)">&#x27A4;</p>
     </button>
     <span>Página {{ currentPage }} de {{ totalPages }}</span>
-    <button
-      (click)="onPageChange(currentPage + 1)"
-      [disabled]="currentPage === totalPages"
-    >
-      Siguiente
+    <button (click)="onPageChange(+1)" [disabled]="currentPage === totalPages">
+      <span>&#x27A4;</span>
     </button>
   </div>
 </content>

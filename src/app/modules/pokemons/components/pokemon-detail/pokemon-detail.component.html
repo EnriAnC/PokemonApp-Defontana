@@ -1,65 +1,80 @@
-<!-- pokemon-detail.component.html -->
-<div *ngIf="selectedPokemon" class="details_container" id="details_container">
-  <header>
-    <h2>
-      Detalles de
-      <span style="text-transform: capitalize; color: blueviolet">{{
-        selectedPokemon.name
-      }}</span>
-    </h2>
-    <p>ID: {{ selectedPokemon.id }}</p>
-  </header>
-  <section class="details_body_section">
-    <div>
-      <article>
-        <strong>Habilidades</strong>
-        <ul>
-          <li *ngFor="let ability of selectedPokemon.abilities">
-            {{ ability.ability.name }}
-          </li>
-        </ul>
-      </article>
+<ng-container *ngIf="selectedPokemon">
+  <!-- pokemon-detail.component.html -->
+  <div class="details_container" id="details_container">
+    <header>
+      <h2>
+        Detalles de
+        <span style="text-transform: capitalize; color: blueviolet">{{
+          selectedPokemon.name
+        }}</span>
+      </h2>
+      <p>ID: {{ selectedPokemon.id }}</p>
+    </header>
+    <section class="details_body_section">
+      <div>
+        <article>
+          <strong>Habilidades</strong>
+          <ul>
+            <li
+              *ngFor="let ability of selectedPokemon.abilities"
+              class="pokemon-stat pokemon-ability"
+            >
+              {{ ability.ability.name }}
+            </li>
+          </ul>
+        </article>
 
-      <article>
-        <strong>Estadísticas</strong>
-        <ul>
-          <li *ngFor="let stat of selectedPokemon.stats" class="pokemon-stat">
-            {{ stat.base_stat }} {{ stat.stat.name }}
-          </li>
-        </ul>
-      </article>
-    </div>
-
-    <section class="image-gallery">
-      <div class="image-main">
-        <img
-          [src]="
-            selectedThumbnail
-              ? selectedThumbnail
-              : selectedPokemon.sprites.front_default
-          "
-          alt="Imagen Principal"
-        />
+        <article>
+          <strong>Estadísticas</strong>
+          <ul>
+            <li *ngFor="let stat of selectedPokemon.stats" class="pokemon-stat">
+              {{ stat.base_stat }} {{ stat.stat.name }}
+            </li>
+          </ul>
+        </article>
       </div>
-      <div class="thumbnails">
-        <ng-container *ngFor="let sprite of selectedPokemon.sprites | keyvalue">
-          <ng-container *ngIf="isString(sprite.value)">
-            <img
-              title="{{ sprite.key }}"
-              src="{{ sprite.value }}"
-              alt="Miniatura"
-              (click)="changeMainImage(sprite.value!)"
-            />
+
+      <section class="image-gallery">
+        <div class="image-main">
+          <img
+            [src]="
+              selectedThumbnail
+                ? selectedThumbnail
+                : selectedPokemon.sprites.front_default
+            "
+            alt="Imagen Principal"
+          />
+        </div>
+        <div class="thumbnails">
+          <ng-container
+            *ngFor="let sprite of selectedPokemon.sprites | keyvalue"
+          >
+            <ng-container *ngIf="isString(sprite.value)">
+              <img
+                title="{{ sprite.key }}"
+                src="{{ sprite.value }}"
+                alt="Miniatura"
+                (click)="changeMainImage(sprite.value!)"
+              />
+            </ng-container>
           </ng-container>
-        </ng-container>
-      </div>
+        </div>
+      </section>
     </section>
-  </section>
-
-  <!-- Agrega más detalles según lo que necesites -->
-</div>
+  </div>
+</ng-container>
 <div *ngIf="!selectedPokemon" id="details_container">
   <h2 style="padding: 0 1rem; color: #757575">
     Selecciona un Pokémon para ver sus detalles
+    <svg
+      width="30"
+      height="30"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="details-button"
+    >
+      <use href="#info-light-svg"></use>
+    </svg>
   </h2>
 </div>

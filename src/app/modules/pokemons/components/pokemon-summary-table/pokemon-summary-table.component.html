@@ -1,6 +1,6 @@
 <h2>Resumen: Conteo de Pokémons por letra inicial</h2>
-<content *ngFor="let chunk of summary | keyvalue | chunk : 7; let i = index">
-  <table>
+<content>
+  <table *ngFor="let chunk of summary | keyvalue | chunk : 7; let i = index">
     <thead>
       <tr>
         <th *ngFor="let item of chunk">{{ item.key }}</th>

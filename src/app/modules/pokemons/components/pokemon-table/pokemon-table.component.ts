@@ -1,17 +1,19 @@
 // pokemon-table.component.ts
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { PokemonService } from '../../services/pokemon.service';
-import { Store, select } from '@ngrx/store';
+import { PokemonService } from '../../services/pokemon-api.service';
+import { Store } from '@ngrx/store';
 import {
   addFavoritePokemon,
   removeFavoritePokemon,
 } from '../../../../shared/store/favorite-pokemon.actions';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Pokemon as IPokemon } from '../../models/pokemon';
 import { PokemonSelectedService } from '../../services/pokemon-selected.service';
 import { PokemonSummaryService } from '../../services/pokemon-summary.service';
 
-import { map } from 'rxjs';
+export interface PokemonInTable {
+  name: string;
+  isFavorite: boolean;
+}
 
 @Component({
   selector: 'app-pokemon-table',
@@ -19,128 +21,99 @@ import { map } from 'rxjs';
   styleUrls: ['./pokemon-table.component.scss'],
 })
 export class PokemonTableComponent implements OnInit {
-  pokemons: any = [];
-  searchTerm: string = '';
-  currentPage: number = 1;
-  pageSize: number = 10;
-  totalPages: number = 0;
-  totalPokemons: number = 0;
-  selectedPokemon: any;
-  formGroup: FormGroup;
-  allPokemonNames: string[] = [];
-  matchingPokemonNames: string[] = [];
-  showRecommendations: boolean = false;
-  favoritePokemons: any[] = [];
+  private favoritePokemons: any[] = [];
+  private searchResults: any[] = [];
+
+  public pageSize: number = 10;
+
+  public pokemonsInTable: any[] = [];
+  public currentPage: number = 1;
+
+  public totalPages: number = 0;
+  public allPokemonNames: string[] = [];
 
   constructor(
     private pokemonService: PokemonService,
     private pokemonSelectedService: PokemonSelectedService,
     private pokemonSummaryService: PokemonSummaryService,
-    private store: Store<{ favorites: any }>,
-    private fb: FormBuilder
-  ) {
-    this.formGroup = this.fb.group({
-      searchTerm: [''], // Aquí puedes aplicar validaciones si es necesario
-    });
-  }
+    private store: Store<{ favorites: any }>
+  ) {}
+
   ngOnInit(): void {
     this.store.select('favorites').subscribe((favorites) => {
-      console.log('Favorites: ', { favorites });
+      // console.log('Favorites: ', { favorites });
       this.favoritePokemons = Object.values(favorites.favorites);
-      this.loadPokemons();
+      if (this.pokemonsInTable.length < 1) this.onResetTable();
+      else {
+        this.chargePokemons(
+          this.searchResults.length > 0
+            ? this.searchResults
+            : this.allPokemonNames
+        );
+      }
     });
+
     this.pokemonSummaryService.getPokemonNames().subscribe((names) => {
       this.allPokemonNames = names;
-      this.loadPokemons();
+      this.chargePokemons(names);
     });
   }
 
-  loadPokemons(): void {
+  private chargePokemons(pokemonsNames: any[]): void {
     // Calcular los índices de inicio y fin para la paginación
     const startIndex = (this.currentPage - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
+    const endIndex = startIndex + Number(this.pageSize);
 
     // Obtener los nombres de Pokémon para la página actual
-    const pokemonNamesForPage = this.allPokemonNames.slice(
-      startIndex,
-      endIndex
-    );
+    const pokemonNamesForPage = pokemonsNames.slice(startIndex, endIndex);
 
     // Mapear los nombres a los detalles de Pokémon
-    const pokemonsForPage = pokemonNamesForPage.map((name) => {
-      const pokemon: any = {
-        name: name,
-        // Otras propiedades si las tienes
-      };
-
-      if (this.isPokemonInFavorites(pokemon)) {
-        pokemon.isFavorite = true;
+    const pokemonsForPage = pokemonNamesForPage.map(
+      (nameOrPokemon: string | { name: string }) => {
+        if (typeof nameOrPokemon === 'string') {
+          const pokemon: PokemonInTable = {
+            name: nameOrPokemon,
+            isFavorite: this.isPokemonInFavorites({
+              name: nameOrPokemon as string,
+            }),
+          };
+          return pokemon;
+        } else if (typeof nameOrPokemon !== 'string') {
+          const pokemon: any = {
+            name: nameOrPokemon.name,
+            isFavorite: this.isPokemonInFavorites({ name: nameOrPokemon.name }),
+          };
+          return pokemon;
+        }
       }
+    );
 
-      return pokemon;
-    });
+    this.pokemonsInTable = pokemonsForPage;
 
-    this.pokemons = pokemonsForPage;
-    this.totalPokemons = this.allPokemonNames.length;
-    this.totalPages = this.totalPokemons
-      ? Math.ceil(this.totalPokemons / this.pageSize)
+    this.calculateTotalPages(pokemonsNames);
+  }
+
+  private calculateTotalPages(allPokemons: any[]): void {
+    const countPokemons = allPokemons.length;
+    this.totalPages = countPokemons
+      ? Math.ceil(countPokemons / this.pageSize)
       : 0;
   }
 
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.loadPokemons();
+  private isPokemonInFavorites(pokemon: { name: string }): boolean {
+    return this.favoritePokemons.some(
+      (favPokemon) => favPokemon.name === pokemon.name
+    );
   }
 
-  onSearch(): void {
-    this.currentPage = 1;
-    const searchTerm = this.formGroup.get('searchTerm')!.value;
-    if (searchTerm.trim() == '') return this.loadPokemons();
-    if (this.allPokemonNames.includes(searchTerm)) {
-      this.pokemons = [
-        {
-          name: searchTerm,
-          url: `https://pokeapi.co/api/v2/pokemon/${searchTerm}`,
-        },
-      ];
-      this.totalPages = 1;
-    } else {
-      this.totalPages = 1;
-      this.pokemons = [{ name: 'No se encontró el Pokémon', url: '' }];
-    }
+  private removeFavorite(pokemon: PokemonInTable): void {
+    this.store.dispatch(removeFavoritePokemon({ pokemon }));
   }
 
-  onSearchTermChanged(event: Event): void {
-    const value = (event.target as HTMLInputElement)?.value;
-    // console.log('onSearchTermChanged: ', value);
-    if (value) {
-      this.matchingPokemonNames = this.allPokemonNames.filter((name) =>
-        name.toLowerCase().includes(value.toLowerCase())
-      );
-      // Aquí puedes mostrar las recomendaciones basadas en matchingPokemonNames
-      this.showRecommendations = this.matchingPokemonNames.length > 0;
-    } else {
-      this.showRecommendations = false;
-    }
-  }
-
-  cleanForm(): void {
-    this.formGroup.get('searchTerm')!.setValue('');
-    this.showRecommendations = false;
-    this.loadPokemons();
-  }
-
-  calculateTotalPages(): number {
-    return this.totalPokemons
-      ? Math.ceil(this.totalPokemons / this.pageSize)
-      : 0;
-  }
-
-  onSelectPokemon(pokemon: any): void {
+  private addFavorite(pokemon: PokemonInTable): void {
     this.pokemonService.getPokemonByName(pokemon.name).subscribe({
-      next: (data: IPokemon) => {
-        // console.log('OnSelectPokemon: ', data);
-        this.pokemonSelectedService.setSelectedPokemon(data);
+      next: (data) => {
+        this.store.dispatch(addFavoritePokemon({ pokemon: data }));
       },
       error: (error) => {
         console.error(
@@ -151,39 +124,60 @@ export class PokemonTableComponent implements OnInit {
     });
   }
 
-  onFavoriteClick(pokemon: any, favoriteStar: HTMLElement): void {
-    console.log('onFavoriteClick: ', pokemon);
-    // Verifica si la clase 'favorite-star' está activa en el elemento
-    if (favoriteStar.classList.contains('favorite-star')) {
-      // La clase 'favorite-star' está activa, por lo que el Pokémon es un favorito y se debe eliminar.
-      this.store.dispatch(removeFavoritePokemon({ pokemon }));
-      favoriteStar.classList.remove('favorite-star');
+  setPageSize(): void {
+    this.chargePokemons(
+      this.searchResults.length > 0 ? this.searchResults : this.allPokemonNames
+    );
+  }
+
+  pagesArray(): number[] {
+    return Array(this.totalPages)
+      .fill(0)
+      .map((_, index) => index + 1);
+  }
+
+  onSelectPage() {
+    this.chargePokemons(
+      this.searchResults.length > 0 ? this.searchResults : this.allPokemonNames
+    );
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = Number(this.currentPage) + Number(page);
+    this.chargePokemons(
+      this.searchResults.length > 0 ? this.searchResults : this.allPokemonNames
+    );
+  }
+
+  onSearchResults(results: any): void {
+    // console.log('onSearchResults: ', results);
+    if (results.length > 0) {
+      this.pokemonsInTable = results;
+      this.searchResults = results;
+      this.currentPage = 1;
+      this.chargePokemons(results);
     } else {
-      // La clase 'favorite-star' no está activa, por lo que el Pokémon no es un favorito y se debe agregar.
-      this.pokemonService.getPokemonByName(pokemon.name).subscribe({
-        next: (data) => {
-          this.store.dispatch(addFavoritePokemon({ pokemon: data }));
-          favoriteStar.classList.add('favorite-star');
-        },
-        error: (error) => {
-          console.error(
-            'Ocurrió un error al cargar los detalles del Pokémon:',
-            error
-          );
-        },
-      });
+      this.onResetTable();
     }
   }
 
-  onRecommendationClick(name: string): void {
-    this.formGroup.get('searchTerm')!.setValue(name);
-    this.showRecommendations = false; // Oculta las recomendaciones cuando se hace clic
+  onResetTable(): void {
+    this.searchResults = [];
+    this.chargePokemons(this.allPokemonNames);
   }
 
-  isPokemonInFavorites(pokemon: any): boolean {
-    // console.log('isPokemonInFavorites: ', pokemon);
-    return this.favoritePokemons.some(
-      (favPokemon) => favPokemon.name === pokemon.name
-    );
+  onSelectPokemon(pokemon: any): void {
+    this.pokemonSelectedService.setSelectedPokemon(pokemon.name);
+  }
+
+  onFavoriteClick(pokemon: PokemonInTable): void {
+    // console.log('onFavoriteClick: ', pokemon);
+    if (pokemon.isFavorite) {
+      pokemon.isFavorite = false;
+      this.removeFavorite(pokemon);
+    } else {
+      pokemon.isFavorite = true;
+      this.addFavorite(pokemon);
+    }
   }
 }

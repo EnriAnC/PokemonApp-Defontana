@@ -12,7 +12,6 @@ import { DialogPokemonService } from '../../services/pokemon-dialog.service';
 })
 export class PokemonFavoritesComponent {
   favoritePokemons$!: Observable<Pokemon[]>;
-  // selectedPokemon: Pokemon | null = null;
 
   constructor(
     private store: Store<{ favorites: any }>,
@@ -21,7 +20,7 @@ export class PokemonFavoritesComponent {
     this.favoritePokemons$ = store.pipe(
       select('favorites'),
       map((favorites) => {
-        console.log('Favorites: ', { favorites });
+        // console.log('Favorites: ', { favorites });
         return Object.values(favorites.favorites);
       })
     );
@@ -32,7 +31,7 @@ export class PokemonFavoritesComponent {
   }
 
   onPokemonClicked(pokemon: Pokemon): void {
-    console.log('Pokemon clicked: ', { pokemon });
+    // console.log('Pokemon clicked: ', { pokemon });
     this.modalPokemonService.setSelectedPokemon(pokemon);
     document.body.parentElement!.classList.add('no-scroll');
   }

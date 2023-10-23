@@ -1,6 +1,6 @@
 // pokemon-summary-table.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PokemonService } from '../../services/pokemon.service';
+import { PokemonService } from '../../services/pokemon-api.service';
 import { PokemonSummaryService } from '../../services/pokemon-summary.service';
 
 @Component({

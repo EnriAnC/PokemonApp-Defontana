@@ -14,7 +14,7 @@ export class PokemonDialogComponent {
   selectedPokemon: any;
 
   constructor(private pokemonService: DialogPokemonService) {
-    this.pokemonService.selectedPokemon$.subscribe((pokemon) => {
+    this.pokemonService.getSelectedPokemon().subscribe((pokemon) => {
       this.selectedPokemon = pokemon;
     });
   }

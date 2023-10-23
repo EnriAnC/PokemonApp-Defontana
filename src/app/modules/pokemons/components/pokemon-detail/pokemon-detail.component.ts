@@ -16,14 +16,14 @@ export class PokemonDetailComponent {
   ngOnInit(): void {
     if (this.selectedPokemon) return;
 
-    this.pokemonSelectedService.selectedPokemon$.subscribe(
-      (pokemon: Pokemon) => {
+    this.pokemonSelectedService
+      .getSelectedPokemon()
+      .subscribe((pokemon: Pokemon | null) => {
         if (!pokemon) return;
-        console.log('Pokemon detail: ', pokemon);
+        // console.log('Pokemon detail: ', pokemon);
         this.selectedPokemon = pokemon;
         this.selectedThumbnail = pokemon.sprites.front_default;
-      }
-    );
+      });
   }
 
   isString(value: any): boolean {
