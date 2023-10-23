@@ -1,4 +1,4 @@
-<content style="padding: 0.5rem 1rem">
+<div class="pokemon-table-container" style="padding: 0.5rem 1rem">
   <h2>¡Busca a tu Pokemón!</h2>
   <app-pokemon-search
     [allPokemonNames]="allPokemonNames"
@@ -98,7 +98,13 @@
               <use href="#start-light-svg"></use>
             </svg>
 
-            <p class="tooltiptext">AGREGAR FAVORITOS</p>
+            <p class="tooltiptext">
+              {{
+                !pokemon.isFavorite
+                  ? "AGREGAR FAVORITOS"
+                  : "QUITAR DE FAVORITOS"
+              }}
+            </p>
           </td>
         </tr>
       </ng-container>
@@ -114,4 +120,4 @@
       <span>&#x27A4;</span>
     </button>
   </div>
-</content>
+</div>

@@ -45,9 +45,9 @@ table {
 
 tr,
 th {
-  white-space: nowrap; /* Evitar saltos de línea */
-  overflow: hidden; /* Ocultar contenido que se desborda */
-  text-overflow: ellipsis; /* Mostrar puntos (...) si se desborda */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 tr {
@@ -103,7 +103,7 @@ td {
   }
 }
 
-content {
+.pokemon-table-container {
   display: flex;
   flex-direction: column;
   height: 100%;

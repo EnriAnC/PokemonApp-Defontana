@@ -49,6 +49,7 @@ $m-y-header: 0.5rem;
       }
       &:nth-child(1) {
         width: 100%;
+        height: fit-content;
       }
       &:nth-child(2) {
         display: grid;
