@@ -1,5 +1,5 @@
 <div class="pokemon-table-container" style="padding: 0.5rem 1rem">
-  <h2>¡Busca a tu Pokemón!</h2>
+  <h2>¡Busca a tu Pokémon!</h2>
   <app-pokemon-search
     [allPokemonNames]="allPokemonNames"
     (searchResults)="onSearchResults($event)"
@@ -19,7 +19,7 @@
       </select>
     </label>
     <label>
-      Pokemóns por página:
+      Pokémons por página:
       <select id="itemsPerPage" [(ngModel)]="pageSize" (change)="setPageSize()">
         <option value="5">5</option>
         <option value="10">10</option>
