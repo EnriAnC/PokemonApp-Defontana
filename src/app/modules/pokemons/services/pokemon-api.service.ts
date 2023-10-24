@@ -26,8 +26,4 @@ export class PokemonService {
   getPokemonByName(searchTerm: string): Observable<IPokemon> {
     return this.http.get<IPokemon>(`${this.apiUrl}/${searchTerm}`);
   }
-
-  // getPokemonByUrl(url: string): Observable<any> {
-  //   return this.http.get<any>(url);
-  // }
 }

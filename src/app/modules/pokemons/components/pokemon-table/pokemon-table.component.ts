@@ -1,5 +1,11 @@
 // pokemon-table.component.ts
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { PokemonService } from '../../services/pokemon-api.service';
 import { Store } from '@ngrx/store';
 import {
@@ -9,6 +15,8 @@ import {
 import { Pokemon as IPokemon } from '../../models/pokemon';
 import { PokemonSelectedService } from '../../services/pokemon-selected.service';
 import { PokemonSummaryService } from '../../services/pokemon-summary.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export interface PokemonInTable {
   name: string;
@@ -20,7 +28,8 @@ export interface PokemonInTable {
   templateUrl: './pokemon-table.component.html',
   styleUrls: ['./pokemon-table.component.scss'],
 })
-export class PokemonTableComponent implements OnInit {
+export class PokemonTableComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<void> = new Subject<void>();
   private favoritePokemons: any[] = [];
   private searchResults: any[] = [];
 
@@ -40,23 +49,40 @@ export class PokemonTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store.select('favorites').subscribe((favorites) => {
-      // console.log('Favorites: ', { favorites });
-      this.favoritePokemons = Object.values(favorites.favorites);
-      if (this.pokemonsInTable.length < 1) this.onResetTable();
-      else {
-        this.chargePokemons(
-          this.searchResults.length > 0
-            ? this.searchResults
-            : this.allPokemonNames
-        );
-      }
-    });
+    this.setupFavoritesSubscription();
+    this.setupPokemonNamesSubscription();
+  }
 
-    this.pokemonSummaryService.getPokemonNames().subscribe((names) => {
-      this.allPokemonNames = names;
-      this.chargePokemons(names);
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupFavoritesSubscription(): void {
+    this.store
+      .select('favorites')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((favorites) => {
+        this.favoritePokemons = Object.values(favorites.favorites);
+        if (this.pokemonsInTable.length < 1) this.onResetTable();
+        else {
+          this.chargePokemons(
+            this.searchResults.length > 0
+              ? this.searchResults
+              : this.allPokemonNames
+          );
+        }
+      });
+  }
+
+  private setupPokemonNamesSubscription(): void {
+    this.pokemonSummaryService
+      .getPokemonNames()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((names) => {
+        this.allPokemonNames = names;
+        this.chargePokemons(names);
+      });
   }
 
   private chargePokemons(pokemonsNames: any[]): void {
@@ -70,21 +96,14 @@ export class PokemonTableComponent implements OnInit {
     // Mapear los nombres a los detalles de Pokémon
     const pokemonsForPage = pokemonNamesForPage.map(
       (nameOrPokemon: string | { name: string }) => {
-        if (typeof nameOrPokemon === 'string') {
-          const pokemon: PokemonInTable = {
-            name: nameOrPokemon,
-            isFavorite: this.isPokemonInFavorites({
-              name: nameOrPokemon as string,
-            }),
-          };
-          return pokemon;
-        } else if (typeof nameOrPokemon !== 'string') {
-          const pokemon: any = {
-            name: nameOrPokemon.name,
-            isFavorite: this.isPokemonInFavorites({ name: nameOrPokemon.name }),
-          };
-          return pokemon;
-        }
+        const name =
+          typeof nameOrPokemon === 'string'
+            ? nameOrPokemon
+            : nameOrPokemon.name;
+        return {
+          name,
+          isFavorite: this.isPokemonInFavorites({ name }),
+        };
       }
     );
 
@@ -152,7 +171,6 @@ export class PokemonTableComponent implements OnInit {
   onSearchResults(results: any): void {
     // console.log('onSearchResults: ', results);
     if (results.length > 0) {
-      this.pokemonsInTable = results;
       this.searchResults = results;
       this.currentPage = 1;
       this.chargePokemons(results);

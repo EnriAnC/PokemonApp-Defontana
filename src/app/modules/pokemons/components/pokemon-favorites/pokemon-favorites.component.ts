@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
+
+import { Pokemon, PokemonCoreInfo } from '../../models/pokemon';
+
 import {
   removeFavoritePokemon,
   setFavoritePokemons,
 } from '../../../../shared/store/favorite-pokemon.actions';
-import {
-  Ability,
-  Pokemon,
-  PokemonCoreInfo,
-  Sprites,
-  Stat,
-} from '../../models/pokemon';
+
 import { DialogPokemonService } from '../../services/pokemon-dialog.service';
 import { LocalStorageService } from '../../services/local-storage-service';
 
@@ -35,7 +32,7 @@ export class PokemonFavoritesComponent implements OnInit {
           this.mapPokemons(favorites.favorites)
         );
 
-        return Object.values(favorites.favorites);
+        return favorites.favorites;
       })
     );
   }

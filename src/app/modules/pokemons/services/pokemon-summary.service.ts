@@ -12,11 +12,13 @@ export class PokemonSummaryService {
 
   constructor(private pokemonService: PokemonService) {}
 
-  loadSummary(totalPokemons: number = 1292): void {
-    this.fetchPokemonNames(totalPokemons).subscribe((names) => {
-      this.allPokemonNamesSubject.next(names);
-      // console.log('allPokemonNames: ', names);
-    });
+  loadSummary(totalPokemons: number = 1292): Observable<void> {
+    return this.fetchPokemonNames(totalPokemons).pipe(
+      map((names) => {
+        this.allPokemonNamesSubject.next(names);
+        return; // You can return void or any value you want
+      })
+    );
   }
 
   private fetchPokemonNames(totalPokemons: number): Observable<string[]> {

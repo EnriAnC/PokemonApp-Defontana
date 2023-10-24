@@ -19,6 +19,7 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     AppRoutingModule,
     HttpClientModule,
+
     StoreModule.forRoot({ favorites: favoritePokemonReducer }, {}),
 
     SharedModule,

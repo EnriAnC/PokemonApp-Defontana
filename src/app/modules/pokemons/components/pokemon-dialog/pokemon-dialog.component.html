@@ -2,12 +2,12 @@
   [attr.open]="selectedPokemon ? true : null"
   class="dialog"
   *ngIf="selectedPokemon"
-  (click)="closeModal($event)"
+  (click)="closeModal()"
 >
   <section (click)="preventDefault($event)">
     <app-pokemon-detail
       [selectedPokemon]="selectedPokemon"
     ></app-pokemon-detail>
-    <span (click)="closeModal($event)">&#10006;</span>
+    <span (click)="closeModal()">&#10006;</span>
   </section>
 </dialog>
